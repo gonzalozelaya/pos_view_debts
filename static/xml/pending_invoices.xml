@@ -1,0 +1,10 @@
+<templates id="template" xml:space="preserve">
+    <t t-name="fix_pos.PartnerLineExtension" t-inherit="point_of_sale.PartnerLine" t-inherit-mode="extension">
+        <xpath expr="//td[@class='edit-partner-button-cell']" position="inside">
+            <!-- Agregamos el nuevo botón dentro de la celda -->
+            <button class="edit-partner-button btn btn-light border" t-on-click.stop="() => props.showDebt(props.partner)">
+                PENDIENTES
+            </button>
+        </xpath>
+    </t>
+</templates>
