@@ -22,13 +22,13 @@
     'depends': ['account','point_of_sale'],
     "assets": {
         "point_of_sale._assets_pos": [
-            "/fix_pos/static/src/xml/pending_invoices.xml",
-            "/fix_pos/static/src/xml/partner_list.xml",
-            "/fix_pos/static/src/js/partner_list.js",
-            "/fix_pos/static/src/js/debt_list.js",
-            "/fix_pos/static/src/xml/debt_list.xml",
+            "/pos_view_debts/static/src/xml/pending_invoices.xml",
+            "/pos_view_debts/static/src/xml/partner_list.xml",
+            "/pos_view_debts/static/src/js/partner_list.js",
+            "/pos_view_debts/static/src/js/debt_list.js",
+            "/pos_view_debts/static/src/xml/debt_list.xml",
+            "/pos_view_debts/static/src/xml/debt_list.scss",
         ],
     },
-    'data':['views/pos_config.xml']
 
 }

@@ -11,14 +11,27 @@ class PosPendingInvoices(models.TransientModel):
         _logger.info(partner_id)
         if not partner_id:
             return []
+        
+        # Forzamos modo superusuario y añadimos TODAS las compañías al contexto:
+        all_company_ids = self.env['res.company'].sudo().search([]).ids
+        ctx = dict(self.env.context, allowed_company_ids=all_company_ids)
     
-        # Obtiene el cliente
-        partner = self.env['res.partner'].sudo().browse(partner_id)
+        # Obtenemos el partner (sin restricción de compañía)
+        partner = self.env['res.partner'].sudo().with_context(ctx).browse(partner_id)
         if not partner:
             return []
-
-        # Obtiene las líneas no conciliadas
-        unreconciled_lines = partner.unreconciled_aml_ids.filtered(lambda line: line.move_id.state == 'posted')
-
-        # Retorna la información relevante de las líneas no conciliadas
-        return unreconciled_lines.read(['name', 'debit', 'credit', 'balance', 'move_id', 'date', 'currency_id'])
+    
+        # Buscar todas las líneas contables de este partner, “posted” y con balance ≠ 0,
+        # ignorando restricción de compañía.
+        unreconciled_lines = self.env['account.move.line'].sudo().search([
+            ('reconciled', '=', False),
+            ('account_id.deprecated', '=', False),
+            ('account_id.account_type', '=', 'asset_receivable'),
+            ('parent_state', '=', 'posted'),
+            ('partner_id', '=', partner.id),
+            ('balance', '!=', 0),
+        ])
+        _logger.info(f"Unreconciled Lines: {unreconciled_lines}")
+    
+        # Obtenemos la información relevante
+        return unreconciled_lines.read(['name', 'debit', 'credit', 'balance', 'move_id', 'date', 'currency_id','company_id'])

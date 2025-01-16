@@ -1,33 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates xml:space="preserve">
     <t t-name="PendingInvoicesPopup">
-        <div class="popup">
-            <div class="popup-title">Facturas Pendientes</div>
-            <div class="popup-content">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Factura</th>
-                            <th>Fecha</th>
-                            <th>Monto</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <t t-foreach="invoices" t-as="invoice" t-key="invoice.id">
+        <div class="popup product-info-popup">
+            <div class="modal-header">
+                <h4 class="modal-title">Facturas pendientes</h4>
+                <div class="btn" t-on-click="cancel">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </div>
+            </div>
+            <main class="body modal-body">
+                <div class="popup-content debts-body">
+                    <table class="table table-striped">
+                        <thead>
                             <tr>
-                                <td><t t-esc="invoice.id"/></td>
-                                <td><t t-esc="invoice.name"/></td>
-                                <td><t t-esc="invoice.date"/></td>
-                                <td><t t-esc="invoice.balance.toFixed(2)"/></td>
+                                <th><strong>Fecha</strong></th>
+                                <th><strong>Factura</strong></th>
+                                <th><strong>Sucursal</strong></th>
+                                <th><strong>Monto</strong></th>
                             </tr>
-                        </t>
-                    </tbody>
-                </table>
-            </div>
-            <div class="popup-footer">
+                        </thead>
+                        <tbody >
+                            <t t-set="total" t-value="0.0"/>
+                            <t t-foreach="invoices" t-as="invoice" t-key="invoice.id">
+                                <t t-set="total" t-value="total + invoice.balance"/>
+                                <tr>
+                                    <td><t t-esc="invoice.date"/></td>
+                                    <td><t t-esc="invoice.name"/></td>
+                                    <td>
+                                        <t t-if="invoice.company_id">
+                                            <t t-esc="invoice.company_id[1]"/>
+                                        </t>
+                                        <t t-else="">
+                                            <span>-</span>
+                                        </t>
+                                    </td>
+                                    <td><span>$</span><t t-esc="invoice.balance.toFixed(2)"/></td>
+                                </tr>
+                            </t>
+                            <tr>
+                                <td colspan="3" style="text-align: right;"><strong>Total:</strong></td>
+                                <td>
+                                    <span>$</span>
+                                    <t t-esc="total.toFixed(2)"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            <!--<div class="popup-footer">
                 <button class="btn btn-primary" t-on-click="trigger('close-popup')">Cerrar</button>
-            </div>
+            </div>-->
+        </main>
         </div>
+        <!--
+        -->
     </t>
 </templates>

@@ -2,6 +2,8 @@
 
 import { patch } from "@web/core/utils/patch";
 import { PartnerListScreen } from "@point_of_sale/app/screens/partner_list/partner_list";
+import { PendingInvoicePopup } from "./debt_list";
+
 
 patch(PartnerListScreen.prototype, {
     /**
@@ -22,7 +24,7 @@ patch(PartnerListScreen.prototype, {
         console.log("Facturas pendientes:", invoices);
 
         if (invoices.length > 0) {
-            this.showPopup("PendingInvoicesPopup", { invoices });
+            this.popup.add( PendingInvoicePopup, { invoices });
         } else {
             this.notification.add(`El cliente ${partner.name} no tiene facturas pendientes.`, 3000);
         }

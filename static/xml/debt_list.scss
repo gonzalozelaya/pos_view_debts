@@ -1,0 +1,11 @@
+.product-info-popup {
+    max-width: 800px !important;
+
+    .modal-body {
+        max-height: 80vh;
+    }
+    .debts-body{
+        max-height: 70vh !important;
+        overflow:scroll !important;
+    }
+}

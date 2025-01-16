@@ -1,22 +1,24 @@
-/** @odoo-module **/
+/** @odoo-module */
 
-import { useState } from "@odoo/owl";
-import { Component } from "@odoo/owl";
-import { Registries } from "@web/core/registry";
+import { AbstractAwaitablePopup } from "@point_of_sale/app/popup/abstract_awaitable_popup";
+import { usePos } from "@point_of_sale/app/store/pos_hook";
 
-class PendingInvoicesPopup extends Component {
+/**
+ * Props:
+ *  {
+ *      info: {object of data}
+ *  }
+ */
+export class PendingInvoicePopup extends AbstractAwaitablePopup {
+    static template = "PendingInvoicesPopup";
+    static defaultProps = { confirmKey: false };
+
     setup() {
-        this.state = useState({
-            invoices: this.props.invoices || [],
-        });
+        super.setup();
+        this.pos = usePos();
+        Object.assign(this, this.props.info);
+        this.invoices = this.props.invoices
+        console.log(this.invoices)
     }
-
-    closePopup() {
-        this.trigger("close-popup");
-    }
+    
 }
-
-PendingInvoicesPopup.template = "PendingInvoicesPopup";
-Registries.Component.add("PendingInvoicesPopup", PendingInvoicesPopup);
-
-export default PendingInvoicesPopup;
